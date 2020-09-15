@@ -1,11 +1,3 @@
-//
-//  ListCollectionViewController.swift
-//  Album
-//
-//  Created by Tony Jung on 2020/09/02.
-//  Copyright © 2020 Tony Jung. All rights reserved.
-//
-
 import UIKit
 import Photos
 
@@ -30,8 +22,7 @@ class ListCollectionViewController: UICollectionViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.setToolbarHidden(false, animated: true)
         self.navigationItem.title = results?.localizedTitle //setting up navigation header
-       // navigationController?.navigationBar.prefersLargeTitles = false
-        
+
         shareButton.isEnabled = false
         shareButton.tintColor = UIColor.clear
         trashButton.isEnabled = false
@@ -44,13 +35,10 @@ class ListCollectionViewController: UICollectionViewController {
         navigationItem.title = results?.localizedTitle
     }
     // MARK: UICollectionViewDataSource
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             let fetchOptions = PHFetchOptions()
             fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: ascendingStat)]
             self.fetchResult = PHAsset.fetchAssets(in: results!, options: fetchOptions)
-        
-       // fetchResult = PHAsset.fetchAssets(in: results!, options: nil)
             return fetchResult.count
     }
 
@@ -61,14 +49,11 @@ class ListCollectionViewController: UICollectionViewController {
         let asset: PHAsset = fetchResult.object(at: indexPath.item)
         imageManager.requestImage(for: asset, targetSize: CGSize(width: 115, height: 115), contentMode: .aspectFill, options: nil, resultHandler: {image, _ in
             cell.photoImg.image = image
-            
         })
-        
         if !collectionView.allowsMultipleSelection{
             cell.layer.borderWidth = 0
             images.removeAll()
         }
-        
         return cell
     }
     
@@ -160,34 +145,16 @@ class ListCollectionViewController: UICollectionViewController {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     
-//        guard let nextViewController: ImageViewController = segue.destination as? ImageViewController else { return }
-//        guard let cell: ListCollectionViewCell = sender as? ListCollectionViewCell else { return }
-//        guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
-//
-//        nextViewController.asset = self.fetchResult.object(at: indexPath.item)
-//        nextViewController.str = "hello"
         if (segue.identifier == "PresentImage") {
             if let vc: ImageViewController = segue.destination as? ImageViewController {
-//            guard let cell: ListCollectionViewCell = sender as? ListCollectionViewCell else { return }
-         //   guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
-//                 vc.asset = self.fetchResult[indexPath.item]
-//               // vc.asset = self.fetchResult.object(at: indexPath.item)
-               // vc.imageView.image = fetchResult[]
                 vc.asset = fetchResult[imageIndex]
                 vc.str = "hello"
                 }
-
             }
-        
-
     }
     
 
     @IBAction func shareAction(_ sender: Any) {
-      //  let textToShare: String = "안녕하세요, 부스트 코스입니다."
-       // let urlToShare: String = "http://www.edwith.org/boostcourse-ios"
-        
         let activityViewController = UIActivityViewController(activityItems: images, applicationActivities: nil)
         // 2. 기본으로 제공되는 서비스 중 사용하지 않을 UIActivityType 제거(선택 사항)
         activityViewController.excludedActivityTypes = [UIActivity.ActivityType.addToReadingList, UIActivity.ActivityType.assignToContact]
